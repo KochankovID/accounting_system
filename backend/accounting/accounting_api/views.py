@@ -1,14 +1,33 @@
 from rest_framework import generics, mixins, viewsets
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
-from accounting_api.models import Equipment, Profession, Order
+from accounting_api.models import Equipment, Profession, Order, Employee
 from accounting_api.serializers import EmployeerRegistrationSerializer, EquipmentSerializer, ProfessionSerializer, \
-    OrderSerializer
+    OrderSerializer, EmployeerGetInfoSerializer
 
 
-class EmployeerRegisterView(generics.CreateAPIView):
-    permission_classes = (AllowAny,)
+class EmployeerCRUDView(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
     serializer_class = EmployeerRegistrationSerializer
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+
+class EmployeerGetInfoView(viewsets.ReadOnlyModelViewSet):
+    queryset = Employee.objects.prefetch_related().all()
+    serializer_class = EmployeerGetInfoSerializer
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 
 class EquipmentCRUDView(viewsets.ModelViewSet):

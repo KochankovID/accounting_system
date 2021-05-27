@@ -1,0 +1,108 @@
+<LoginScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        MDToolbar:
+            title: "Login"
+            size_hint_y: .1
+        BoxLayout:
+            orientation: "horizontal"
+            padding: self.width / 7
+            BoxLayout:
+                orientation: "vertical"
+                spacing: 10
+                FloatLayout:
+                    size_hint_y: .2
+                MDTextField:
+                    id: login
+                    hint_text: "login"
+                    required: True
+                    on_focus: root.focus(login)
+                    on_text_validate: root.login()
+                MDTextField:
+                    id: password
+                    hint_text: "password"
+                    required: True
+                    on_focus: root.focus(password)
+                    on_text_validate: root.login()
+                    password: True
+                BoxLayout:
+                    size_hint_y: .15
+                    orientation: "horizontal"
+                    FloatLayout:
+                        size_hint_x: .5
+                    MDRoundFlatButton:
+                        text: "Login"
+                        text_color: 0, 1, 0, 1
+                        on_press: root.login()
+                FloatLayout:
+                    size_hint_y: .3
+
+
+<MainPage>:
+    ScreenManager:
+
+        Screen:
+            BoxLayout:
+                orientation: "vertical"
+                MDToolbar:
+                    id: toolbar
+                    title: "MainPage"
+                    size_hint_y: .1
+                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                MDTabs:
+                    size_hint_y: .9
+                    allow_stretch: True
+                    tab_hint_x: True
+                    fixed_tab_label_width: self.width / 2
+                    Tab:
+                        id: tab1
+                        text: "Inventory"
+                    Tab:
+                        id: tab2
+                        text: "Orders"
+
+    MDNavigationDrawer:
+        id: nav_drawer
+        BoxLayout:
+            padding: 10
+            orientation: "vertical"
+            FloatLayout:
+                size_hint_y: .1
+            BoxLayout:
+                size_hint_y: .1
+                orientation: "horizontal"
+                MDLabel:
+                    halign: "right"
+                    text: "Имя: "
+                MDLabel:
+                    text: root.first_name
+            BoxLayout:
+                size_hint_y: .1
+                orientation: "horizontal"
+                MDLabel:
+                    halign: "right"
+                    text: "Фамилия: "
+                MDLabel:
+                    text: root.second_name
+            BoxLayout:
+                size_hint_y: .1
+                orientation: "horizontal"
+                MDLabel:
+                    halign: "right"
+                    text: "Должность: "
+                MDLabel:
+                    text: root.profession or "неуказанно"
+            BoxLayout:
+                size_hint_y: .1
+                orientation: "horizontal"
+                MDLabel:
+                    halign: "right"
+                    text: "Дата создания: "
+                MDLabel:
+                    text: root.created_at[:10]
+            FloatLayout:
+                size_hint_y: .4
+            MDRoundFlatButton:
+                pos_hint: {'center_x': .5}
+                text: "Logout"
+                on_press: root.logout()
